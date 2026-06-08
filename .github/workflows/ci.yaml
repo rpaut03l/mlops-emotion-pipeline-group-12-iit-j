@@ -3,7 +3,7 @@ on:
   push:
     branches: [develop]
   pull_request:
-    branches: [develop, main]   # <-- added develop
+    branches: [develop, main]
 
 jobs:
   lint:
@@ -14,4 +14,10 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install flake8
-      - run: flake8 src/ --max-line-length=120
+      - name: Lint
+        run: |
+          if ls src/*.py >/dev/null 2>&1; then
+            flake8 src/ --max-line-length=120
+          else
+            echo "No Python files in src/ yet — skipping lint."
+          fi
