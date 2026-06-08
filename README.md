@@ -77,7 +77,6 @@ GitHub Actions is used for **CI (lint) and inference only — never training**. 
 | Amit Singh (G25AIT2007) | [@Amitstreet](https://github.com/Amitstreet) | Collaborator (Write) | T2, T8 |
 | Aishwarya Mishra (G25AIT2137) | [@g25ait2134-tech](https://github.com/g25ait2134-tech) | Collaborator (Write) | T3, Report |
 
-> Confirm the Venkata / Aishwarya ↔ handle mapping above is correct before sharing.
 
 ## ✅ Task Breakdown & Marks
 
