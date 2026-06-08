@@ -1,0 +1,8 @@
+# Auto-requests a reviewer when files in these paths change.
+*                       @rpaut03l
+/src/prepare_data.py    @Amitstreet
+/id2label.json          @Amitstreet
+/notebooks/             @g25ait2137-ops
+/src/inference.py       @rpaut03l @g25ait2134-tech
+/Dockerfile             @rpaut03l
+/.github/               @rpaut03l
