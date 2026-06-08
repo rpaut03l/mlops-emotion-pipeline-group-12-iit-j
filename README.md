@@ -8,7 +8,7 @@
 [![Model: DistilBERT](https://img.shields.io/badge/model-distilbert--base--uncased-orange.svg)](https://huggingface.co/distilbert-base-uncased)
 [![Dataset: dair-ai/emotion](https://img.shields.io/badge/dataset-dair--ai%2Femotion-ff69b4.svg)](https://huggingface.co/datasets/dair-ai/emotion)
 
-**Course:** MLOps · PGD AI Program · IIT Jodhpur · **Group 12**
+**Course:** MLOps · M.Tech AI Program · IIT Jodhpur · **Group 12**
 
 ---
 
