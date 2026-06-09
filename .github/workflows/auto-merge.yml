@@ -1,8 +1,13 @@
-name: Auto-merge
+name: Auto-Merge
+
+# Enables GitHub's NATIVE auto-merge ONLY for feature/* PRs into develop.
+# It never bypasses branch protection: the PR still merges only after the
+# required review(s) and status checks pass. Filtering here is about intent
+# and tidiness; branch protection is the real gate.
 
 on:
   pull_request:
-    types: [opened, ready_for_review, labeled]
+    types: [opened, reopened, ready_for_review, synchronize, labeled]
 
 permissions:
   contents: write
@@ -11,7 +16,10 @@ permissions:
 jobs:
   enable-automerge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.base.ref == 'develop' && github.event.pull_request.draft == false
+    if: >-
+      github.event.pull_request.base.ref == 'develop' &&
+      startsWith(github.event.pull_request.head.ref, 'feature/') &&
+      github.event.pull_request.draft == false
     steps:
       - name: Enable auto-merge (squash)
         run: gh pr merge --auto --squash "${{ github.event.pull_request.number }}"
