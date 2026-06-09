@@ -9,6 +9,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - (add new work here as PRs merge into `develop`)
 
 ### Changed
+- Restrict auto-merge to feature/* PRs into develop (excludes drafts, re-checks on push).
 
 ### Fixed
 
