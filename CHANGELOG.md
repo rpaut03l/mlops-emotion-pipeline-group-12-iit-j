@@ -9,7 +9,9 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 
 ### Added
-- (add new work here as PRs merge into `develop`)
+- T1: Restrict auto-merge to feature/* PRs into develop (excludes drafts, re-checks on push).
+- T6: Docker inference image (rohitpatel/mlops-a3-inference)
+- T7: Manual inference workflow.
 
 
 ### Changed
