@@ -1,13 +1,15 @@
 name: Auto-Merge
 
-# Enables GitHub's NATIVE auto-merge ONLY for feature/* PRs into develop.
-# It never bypasses branch protection: the PR still merges only after the
-# required review(s) and status checks pass. Filtering here is about intent
-# and tidiness; branch protection is the real gate.
-
 on:
+  # Automatic: feature/* PRs into develop
   pull_request:
     types: [opened, reopened, ready_for_review, synchronize, labeled]
+  # Manual: run from the Actions tab, type the PR number
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to enable auto-merge on'
+        required: true
 
 permissions:
   contents: write
@@ -16,13 +18,16 @@ permissions:
 jobs:
   enable-automerge:
     runs-on: ubuntu-latest
+    # auto path: only feature/* into develop. manual path: always allowed.
     if: >-
-      github.event.pull_request.base.ref == 'develop' &&
-      startsWith(github.event.pull_request.head.ref, 'feature/') &&
-      github.event.pull_request.draft == false
+      github.event_name == 'workflow_dispatch' ||
+      ( github.event.pull_request.base.ref == 'develop' &&
+        startsWith(github.event.pull_request.head.ref, 'feature/') &&
+        github.event.pull_request.draft == false )
     steps:
       - name: Enable auto-merge (squash)
-        run: gh pr merge --auto --squash "${{ github.event.pull_request.number }}"
+        run: gh pr merge --auto --squash "${PR}"
         env:
+          PR: ${{ github.event.inputs.pr_number || github.event.pull_request.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
