@@ -32,10 +32,25 @@ jobs:
         KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
       run: kaggle kernels pull amitsinghg25ait2007/notebook77809846a9 -p notebooks/
 
-    - name: Commit and push changes
+    - name: Open PR with synced notebook
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add .
-        git diff --cached --quiet || git commit -m "Update Kaggle notebooks"
-        git push origin HEAD:develop
+        BRANCH="feature/kaggle-sync-$(date +%Y%m%d-%H%M%S)"
+        git checkout -b "$BRANCH"
+        git add notebooks/
+        git diff --cached --quiet && { echo "no changes to sync"; exit 0; }
+        git commit -m "chore: sync Kaggle notebook"
+        git push origin "$BRANCH"
+        gh pr create --base develop --head "$BRANCH" \
+          --title "Sync Kaggle notebook" --body "Automated notebook sync."
+
+    # - name: Commit and push changes
+    #   run: |
+    #     git config --global user.name 'github-actions[bot]'
+    #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    #     git add .
+    #     git diff --cached --quiet || git commit -m "Update Kaggle notebooks"
+    #     git push origin HEAD:develop
