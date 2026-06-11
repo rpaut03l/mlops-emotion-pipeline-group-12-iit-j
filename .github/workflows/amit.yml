@@ -1,0 +1,41 @@
+name: Sync Kaggle Notebooks
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+# ✅ Fix 1: Grant write permissions to push commits
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2        # ✅ Fix 2: Pinned version with Node.js 24 support
+      with:
+        ref: develop
+        token: ${{ secrets.GITHUB_TOKEN }} # ✅ Fix 3: Explicit token for push auth
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install kaggle
+      run: pip install kaggle
+
+    - name: Download Kaggle notebook
+      env:
+        KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+        KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+      run: kaggle kernels pull amitsinghg25ait2007/notebook77809846a9 -p notebooks/
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        git diff --cached --quiet || git commit -m "Update Kaggle notebooks"
+        git push origin feature/task2
