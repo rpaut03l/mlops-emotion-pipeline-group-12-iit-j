@@ -15,7 +15,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4.2.2        # ✅ Fix 2: Pinned version with Node.js 24 support
       with:
-        ref: master
+        ref: develop
         token: ${{ secrets.GITHUB_TOKEN }} # ✅ Fix 3: Explicit token for push auth
 
     - name: Setup Python
@@ -38,4 +38,4 @@ jobs:
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add .
         git diff --cached --quiet || git commit -m "Update Kaggle notebooks"
-        git push origin task2
+        git push origin feature/task2
