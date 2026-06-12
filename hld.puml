@@ -1,0 +1,43 @@
+@startuml MLOps_HLD
+title MLOps Emotion-Classification Pipeline — High-Level Design
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor "Group\n(collaborators)" as team
+
+cloud "GitHub" as gh {
+  component "Repo\nsrc / Dockerfile / workflows\n[Task 1]" as repo
+  component "GitHub Actions\nCI lint + inference\n[Task 7]" as actions
+}
+
+cloud "Hugging Face Hub" as hf {
+  database "Dataset\ndair-ai/emotion\n[Task 2 source]" as dataset
+  database "Model + card\ndistilbert-emotion\n[Task 5 registry]" as model
+}
+
+node "Kaggle (GPU)" as kaggle {
+  component "Notebook\nprep / train\n[Tasks 2-4]" as nb
+}
+
+cloud "Weights & Biases" as wandb {
+  component "Project\nexperiments\n[Tasks 4, 8]" as wbproj
+}
+
+node "Container Registry" as registry {
+  component "Docker image\ninference\n[Task 6]" as docker
+}
+
+team --> repo : push code
+dataset --> nb : load_dataset()
+nb --> wbproj : log metrics + system
+nb --> model : push_to_hub()
+repo --> actions : triggers
+model --> docker : pull (build/run)
+model --> actions : pull for inference
+repo ..> docker : Dockerfile build context
+
+note bottom of kaggle : secrets via Kaggle Secrets\n(HF_TOKEN, WANDB_API_KEY)
+note bottom of actions : secrets via GitHub Secrets
+
+@enduml
