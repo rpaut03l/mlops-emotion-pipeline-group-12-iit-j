@@ -24,6 +24,10 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 - T1: Restrict auto-merge to feature/* PRs into develop (excludes drafts, re-checks on push).
+- T2: Prepare data and perform clean up
+- T3: Load a public hugging face model and load the correct id2labels
+- T4: Train multiple versions on kaggle & Track with W&B
+- T5: Push the trained Model to Hugging face hub
 - T6: Docker inference image (rohitpatel/mlops-a3-inference)
 - T7: Manual inference workflow.
 
