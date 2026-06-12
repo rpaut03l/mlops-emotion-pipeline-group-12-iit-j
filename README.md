@@ -29,19 +29,8 @@
 
 ## 🏗 Architecture
 
-```
- dair-ai/emotion        Kaggle GPU (T4)            Hugging Face Hub
- (16k/2k/2k, 6 cls)  ──▶ fine-tune DistilBERT  ──▶ public model repo
-        │                 V1 + V2 + W&B logs           │
-        ▼                                              ▼
- prepare_data.py                                 inference.py
- id2label.json                                    │       │
-                                                  ▼       ▼
-                                            Docker image  GitHub Actions
-                                            (Docker Hub)  (CI + Inference)
-```
+![alt text](./architecture.png)
 
-GitHub Actions is used for **CI (lint) and inference only — never training**. All training runs on Kaggle.
 
 ## 🧰 Tech Stack
 
