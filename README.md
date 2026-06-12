@@ -203,7 +203,7 @@ python src/prepare_data.py            # uses load_dataset("dair-ai/emotion","spl
 # 3. Build + test inference image (T6)
 docker build --build-arg HF_MODEL_NAME=<hf-user>/mlops-a3-emotion \
              -t mlops-a3-inference:latest .
-docker run --rm -e INPUT_TEXT='i feel so happy today' mlops-a3-inference:latest   # -> joy
+docker run --rm -e HF_TOKEN = <hf-token> -e INPUT_TEXT='i feel so happy today' mlops-a3-inference:latest   # -> joy
 
 # 4. Push image
 docker push <dockerhub-user>/mlops-a3-inference:latest
