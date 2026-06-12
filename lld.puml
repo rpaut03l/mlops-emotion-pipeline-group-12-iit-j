@@ -1,0 +1,61 @@
+@startuml MLOps_LLD
+title MLOps Pipeline — Low-Level Design (execution sequence)
+
+skinparam shadowing false
+autonumber
+
+actor Dev
+participant "Kaggle\nNotebook" as NB
+participant "HF Hub\n(dataset)" as DS
+participant "HF Hub\n(model)" as MD
+participant "W&B" as WB
+participant "GitHub\nRepo" as REPO
+participant "GitHub\nActions" as GA
+participant "Docker" as DK
+
+== Task 1: Repository ==
+Dev -> REPO : create repo, protect main, add collaborators
+Dev -> REPO : commit scaffold (src/, workflows, Dockerfile)
+
+== Task 2: Data preparation ==
+NB -> DS : load_dataset("dair-ai/emotion", "split", token)
+NB -> NB : clean_split() — strip + drop duplicates
+NB -> NB : de-leak train vs val/test
+NB -> NB : derive id2label -> id2label.json
+NB -> NB : tokenize(max_length=64); label -> labels
+NB -> NB : save_to_disk()
+
+== Task 3: Model loading ==
+NB -> NB : AutoModelForSequenceClassification\n(num_labels=6, id2label)
+
+== Task 4: Train two versions ==
+loop cfg in [v1 lr=2e-5, v2 lr=5e-5]
+  NB -> WB : wandb.init(config=cfg)
+  NB -> NB : Trainer.train() (fp16, eval per epoch)
+  NB -> WB : log loss / acc / f1 / f1_macro + system
+  NB -> NB : evaluate(test) -> summary
+  NB -> WB : wandb.finish()
+end
+
+== Task 5: Publish best model ==
+NB -> MD : push_to_hub(best ckpt + tokenizer, private=False)
+NB -> MD : push ModelCard (metadata + metrics)
+NB -> WB : run.summary["huggingface_model"] = url
+
+== Task 6: Containerise ==
+Dev -> DK : docker build (ARG MODEL_NAME)
+Dev -> DK : docker run --text "..."
+DK -> MD : from_pretrained(MODEL_NAME)
+DK -> DK : inference.py -> predicted label
+Dev -> DK : docker push (public registry)
+
+== Task 7: Automation ==
+Dev -> REPO : push to develop
+REPO -> GA : trigger ci.yml (flake8 src/)
+Dev -> GA : workflow_dispatch(input_text)
+GA -> MD : inference.py pulls model
+GA -> GA : print prediction
+
+== Task 8: Dashboard ==
+Dev -> WB : set project public, comparison view
+@enduml
