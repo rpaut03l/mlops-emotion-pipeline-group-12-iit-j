@@ -168,24 +168,29 @@ Keep this updated as work lands — it feeds the "individual contributions" sect
 
 ```
 .
-├── src/
-│   ├── prepare_data.py     # T2: clean + encode + id2label.json
-│   └── inference.py        # Docker + Actions entrypoint
-├── notebooks/
-│   └── train_kaggle.ipynb  # T4/T5: train V1+V2, push best to HF
 ├── .github/
 │   ├── workflows/
-│   │   ├── ci.yml          # T7.1: lint on push→develop
-│   │   ├── inference.yml   # T7.2: manual inference
-│   │   └── auto-merge.yml  # enables native auto-merge on approved PRs
-│   ├── CODEOWNERS          # auto-requests reviewers per path
-│   └── pull_request_template.md
-├── Dockerfile              # T6
-├── id2label.json           # committed label map (6 emotions)
+│   │   ├── amit.yml                 # syncs Kaggle notebook into the repo
+│   │   ├── ci.yaml                  # T7.1: lint on push→develop
+│   │   ├── inference.yml            # T7.2: manual inference (workflow_dispatch)
+│   │   ├── auto-merge.yml           # native auto-merge on approved PRs
+│   │   └── pull_request_template.md # PR template
+│   └── CODEOWNERS                   # auto-requests reviewers per path
+├── notebooks/
+│   ├── notebook012c22c8bb.ipynb     # Kaggle notebook (synced)
+│   └── train_kaggle.ipynb           # T4/T5: train V1+V2, push best to HF
+├── src/
+│   └── inference.py                 # Docker + Actions entrypoint
+├── Dockerfile                       # T6
+├── HLD_UML.svg                      # rendered high-level design diagram
+├── LLD_UML.svg                      # rendered low-level design diagram
+├── hld.puml                         # PlantUML source — HLD
+├── lld.puml                         # PlantUML source — LLD
+├── id2label.json                    # committed label map (6 emotions)
 ├── requirements.txt
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
-├── LICENSE                 # MIT
+├── LICENSE                          # MIT
 └── README.md
 ```
 
