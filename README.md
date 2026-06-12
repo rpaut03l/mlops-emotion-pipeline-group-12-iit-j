@@ -62,7 +62,7 @@
 | Member | GitHub Handle | Role | Owns |
 |---|---|---|---|
 | Rohit Patel (G25AIT2089) | [@rpaut03l](https://github.com/rpaut03l) | Admin / Owner | T1, T6, T7 |
-| Yekkirala Venkata Radhe Shyam (G25AIT2134) | [@g25ait2134-tech](https://github.com/g25ait2134-tech) | Collaborator (Write) | T4, T5 |
+| Yekkirala Venkata Radhe Shyam (G25AIT2134) | [@g25ait2134-tech](https://github.com/g25ait2134-tech) [@vrsyvby(https://github.com/vrsyvby)| Collaborator (Write) | T4, T5 |
 | Amit Singh (G25AIT2007) | [@Amitstreet](https://github.com/Amitstreet) | Collaborator (Write) | T2, T8 |
 | Aishwarya Mishra (G25AIT2137) | [@g25ait2134-tech](https://github.com/g25ait2137-ops) | Collaborator (Write) | T3, Report |
 
