@@ -29,7 +29,7 @@
 
 ## 🏗 Architecture
 
-![alt text](./architecture.png)
+![alt text](./HLD_UML.svg)
 
 
 ## 🧰 Tech Stack
