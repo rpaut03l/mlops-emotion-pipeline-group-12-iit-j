@@ -2,7 +2,7 @@
 
 > **End-to-end MLOps pipeline** — fine-tuning `distilbert-base-uncased` on the `dair-ai/emotion` dataset (6-class text classification), with Kaggle GPU training, Weights & Biases tracking, Hugging Face model hosting, Docker inference, and GitHub Actions CI/CD.
 
-[![CI](https://github.com/rpaut03l/mlops-emotion-pipeline-group-12-iit-j/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/rpaut03l/mlops-emotion-pipeline-group-12-iit-j/actions/workflows/ci.yml)
+[![CI](https://github.com/rpaut03l/mlops-emotion-pipeline-group-12-iit-j/actions/workflows/ci.yaml/badge.svg?branch=develop)](https://github.com/rpaut03l/mlops-emotion-pipeline-group-12-iit-j/actions/workflows/ci.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
 [![Model: DistilBERT](https://img.shields.io/badge/model-distilbert--base--uncased-orange.svg)](https://huggingface.co/distilbert-base-uncased)
@@ -49,10 +49,9 @@
 | Component | Link | Status |
 |---|---|---|
 | GitHub Repo | https://github.com/rpaut03l/mlops-emotion-pipeline-group-12-iit-j | ✅ public |
-| Kaggle Notebook V1 | https://www.kaggle.com/code/shyamg25ait2134/notebook012c22c8bb | ✅ public |
-| Kaggle Notebook V2 | https://www.kaggle.com/code/shyamg25ait2134/notebook012c22c8bb | ✅ public|
+| Kaggle Notebook (V1 + V2) | https://www.kaggle.com/code/shyamg25ait2134/notebook012c22c8bb | ✅ public |
 | Hugging Face Model | https://huggingface.co/G25AIT2134/distilbert-emotion | ✅ public |
-| Docker Image | https://hub.docker.com/r/rohitpatel/mlops-a3-inference| ✅ public |
+| Docker Image | https://hub.docker.com/r/rohitpatel/mlops-a3-inference | ✅ public |
 | W&B Dashboard | https://wandb.ai/g25ait2134-iitj/mlops-emotion-distilbert/workspace?nw=nwuserg25ait2134 | ✅ public |
 
 > ⚠️ Every link must open in an **incognito window** at submission time. Private/broken = 0 for that component.
@@ -62,9 +61,9 @@
 | Member | GitHub Handle | Role | Owns |
 |---|---|---|---|
 | Rohit Patel (G25AIT2089) | [@rpaut03l](https://github.com/rpaut03l) | Admin / Owner | T1, T6, T7 |
-| Yekkirala Venkata Radhe Shyam (G25AIT2134) | [@g25ait2134-tech](https://github.com/g25ait2134-tech) [@vrsyvby(https://github.com/vrsyvby)| Collaborator (Write) | T4, T5 |
+| Yekkirala Venkata Radhe Shyam (G25AIT2134) | [@g25ait2134-tech](https://github.com/g25ait2134-tech) · [@vrsyvby](https://github.com/vrsyvby) | Collaborator (Write) | T4, T5 |
 | Amit Singh (G25AIT2007) | [@Amitstreet](https://github.com/Amitstreet) | Collaborator (Write) | T2, T8 |
-| Aishwarya Mishra (G25AIT2137) | [@g25ait2134-tech](https://github.com/g25ait2137-ops) | Collaborator (Write) | T3, Report |
+| Aishwarya Mishra (G25AIT2137) | [@g25ait2137-ops](https://github.com/g25ait2137-ops) | Collaborator (Write) | T3, Report |
 
 
 ## ✅ Task Breakdown & Marks
@@ -114,7 +113,7 @@
 <summary><b>T4 — Train 2 Versions + W&B (25) · Venkata</b></summary>
 
 - [x] Store `WANDB_API_KEY` + `HF_TOKEN` in Kaggle Secrets — **3**
-- [x] V1 `lr=3e-5` / V2 `lr=5e-5` (one hyperparameter changed) — **7**
+- [x] V1 `lr=2e-5` / V2 `lr=5e-5` (one hyperparameter changed) — **7**
 - [x] Log train loss, val loss, accuracy, F1, all hyperparams — **7**
 - [x] Screenshot W&B with both runs → report — **5**
 </details>
@@ -139,7 +138,7 @@
 <details>
 <summary><b>T7 — GitHub Actions (15) · Rohit</b></summary>
 
-- [x] CI workflow (`ci.yml`) — lint on push→`develop` — **5**
+- [x] CI workflow (`ci.yaml`) — lint on push→`develop` — **5**
 - [x] Inference workflow (`inference.yml`) — manual `workflow_dispatch` — **7**
 - [x] `HF_TOKEN` in GitHub Secrets; no committed tokens — **3**
 - [x] Trigger inference → success screenshot → report
@@ -177,7 +176,7 @@ Keep this updated as work lands — it feeds the "individual contributions" sect
 │   │   └── pull_request_template.md # PR template
 │   └── CODEOWNERS                   # auto-requests reviewers per path
 ├── notebooks/
-│   ├── notebook012c22c8bb.ipynb     # Kaggle notebook (synced)
+│   ├── notebook012c22c8bb.ipynb     # T4/T5 training (V1+V2) + T10 drift & fairness analysis
 │   └── train_kaggle.ipynb           # T4/T5: train V1+V2, push best to HF
 ├── src/
 │   └── inference.py                 # Docker + Actions entrypoint
@@ -206,9 +205,11 @@ python src/prepare_data.py            # uses load_dataset("dair-ai/emotion","spl
 #    push best model to a PUBLIC Hugging Face repo.
 
 # 3. Build + test inference image (T6)
-docker build --build-arg HF_MODEL_NAME=<hf-user>/mlops-a3-emotion \
+docker build --build-arg HF_MODEL_NAME=G25AIT2134/distilbert-emotion \
              -t mlops-a3-inference:latest .
-docker run --rm -e HF_TOKEN = <hf-token> -e INPUT_TEXT='i feel so happy today' mlops-a3-inference:latest   # -> joy
+# Model is public, so HF_TOKEN is optional. To pass one, inherit from the shell
+# (export HF_TOKEN=... first) rather than typing the secret on the command line:
+docker run --rm -e INPUT_TEXT='i feel so happy today' mlops-a3-inference:latest   # -> joy
 
 # 4. Push image
 docker push <dockerhub-user>/mlops-a3-inference:latest
