@@ -5,7 +5,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 MODEL = os.environ.get("HF_MODEL_NAME", "G25AIT2134/distilbert-emotion")
 TEXT = os.environ.get("INPUT_TEXT", "i feel so happy today")
-TOKEN = os.environ.get("HF_TOKEN")  # public model - not needed
+TOKEN = os.environ.get("HF_TOKEN") or None  # public model - not needed
 
 
 def main():
