@@ -29,19 +29,8 @@
 
 ## 🏗 Architecture
 
-```
- dair-ai/emotion        Kaggle GPU (T4)            Hugging Face Hub
- (16k/2k/2k, 6 cls)  ──▶ fine-tune DistilBERT  ──▶ public model repo
-        │                 V1 + V2 + W&B logs           │
-        ▼                                              ▼
- prepare_data.py                                 inference.py
- id2label.json                                    │       │
-                                                  ▼       ▼
-                                            Docker image  GitHub Actions
-                                            (Docker Hub)  (CI + Inference)
-```
+![alt text](./HLD_UML.svg)
 
-GitHub Actions is used for **CI (lint) and inference only — never training**. All training runs on Kaggle.
 
 ## 🧰 Tech Stack
 
@@ -60,11 +49,11 @@ GitHub Actions is used for **CI (lint) and inference only — never training**. 
 | Component | Link | Status |
 |---|---|---|
 | GitHub Repo | https://github.com/rpaut03l/mlops-emotion-pipeline-group-12-iit-j | ✅ public |
-| Kaggle Notebook V1 | `<kaggle-v1-url>` | ⬜ |
-| Kaggle Notebook V2 | `<kaggle-v2-url>` | ⬜ |
-| Hugging Face Model | `<hf-model-url>` | ⬜ |
-| Docker Image | `<docker-image-url>` | ⬜ |
-| W&B Dashboard | `<wandb-project-url>` | ⬜ |
+| Kaggle Notebook V1 | https://www.kaggle.com/code/shyamg25ait2134/notebook012c22c8bb | ✅ public |
+| Kaggle Notebook V2 | https://www.kaggle.com/code/shyamg25ait2134/notebook012c22c8bb | ✅ public|
+| Hugging Face Model | https://huggingface.co/G25AIT2134/distilbert-emotion | ✅ public |
+| Docker Image | https://hub.docker.com/r/rohitpatel/mlops-a3-inference| ✅ public |
+| W&B Dashboard | https://wandb.ai/g25ait2134-iitj/mlops-emotion-distilbert/workspace?nw=nwuserg25ait2134 | ✅ public |
 
 > ⚠️ Every link must open in an **incognito window** at submission time. Private/broken = 0 for that component.
 
@@ -73,9 +62,9 @@ GitHub Actions is used for **CI (lint) and inference only — never training**. 
 | Member | GitHub Handle | Role | Owns |
 |---|---|---|---|
 | Rohit Patel (G25AIT2089) | [@rpaut03l](https://github.com/rpaut03l) | Admin / Owner | T1, T6, T7 |
-| Yekkirala Venkata Radhe Shyam (G25AIT2134) | [@g25ait2137-ops](https://github.com/g25ait2137-ops) | Collaborator (Write) | T4, T5 |
+| Yekkirala Venkata Radhe Shyam (G25AIT2134) | [@g25ait2134-tech](https://github.com/g25ait2134-tech) [@vrsyvby(https://github.com/vrsyvby)| Collaborator (Write) | T4, T5 |
 | Amit Singh (G25AIT2007) | [@Amitstreet](https://github.com/Amitstreet) | Collaborator (Write) | T2, T8 |
-| Aishwarya Mishra (G25AIT2137) | [@g25ait2134-tech](https://github.com/g25ait2134-tech) | Collaborator (Write) | T3, Report |
+| Aishwarya Mishra (G25AIT2137) | [@g25ait2134-tech](https://github.com/g25ait2137-ops) | Collaborator (Write) | T3, Report |
 
 
 ## ✅ Task Breakdown & Marks
@@ -90,7 +79,8 @@ GitHub Actions is used for **CI (lint) and inference only — never training**. 
 | T6 | Create Dockerfile (inference container) | Rohit | 10 |
 | T7 | GitHub Actions — CI + Inference workflows | Rohit | 15 |
 | T8 | W&B experiments dashboard | Amit | 5 |
-| — | Report PDF (4–5 pages) | Aishwarya | 5 |
+| T9 | Report PDF (4–5 pages) | Aishwarya | 5 |
+| T10 | HLD, LLD, drift, fairness simulation | Venkata |
 | | **TOTAL** | | **100** |
 
 ### Detailed do-items
@@ -99,66 +89,66 @@ GitHub Actions is used for **CI (lint) and inference only — never training**. 
 
 - [x] Create **public** repo with `README.md`, `.gitignore`, `LICENSE` — **2**
 - [x] Add `develop` branch; protect `main` (≥1 PR review to merge) — **3**
-- [ ] Admin (Rohit) + 3 Collaborators with **Write** — **3**
-- [ ] Screenshot Collaborators settings page → report — **2**
+- [x] Admin (Rohit) + 3 Collaborators with **Write** — **3**
+- [x] Screenshot Collaborators settings page → report — **2**
 </details>
 
 <details>
 <summary><b>T2 — Data Prep & Normalisation (15) · Amit</b></summary>
 
-- [ ] Inspect raw data: 16k/2k/2k, 6 classes, note class imbalance — **3**
-- [ ] Clean: lowercase, strip URLs, collapse whitespace, dedupe — **6**
-- [ ] Encode labels + save `id2label.json` — **3**
-- [ ] Save dataset locally; commit **only** the mapping file — **3**
+- [x] Inspect raw data: 16k/2k/2k, 6 classes, note class imbalance — **3**
+- [x] Clean: lowercase, strip URLs, collapse whitespace, dedupe — **6**
+- [x] Encode labels + save `id2label.json` — **3**
+- [x] Save dataset locally; commit **only** the mapping file — **3**
 </details>
 
 <details>
 <summary><b>T3 — Select & Load Model (10) · Aishwarya</b></summary>
 
-- [ ] Load `distilbert-base-uncased` tokenizer — **3**
-- [ ] Load model with `num_labels=6` from `id2label` — **3**
-- [ ] 100–150 word justification citing the HF model card → report — **4**
+- [x] Load `distilbert-base-uncased` tokenizer — **3**
+- [x] Load model with `num_labels=6` from `id2label` — **3**
+- [x] 100–150 word justification citing the HF model card → report — **4**
 </details>
 
 <details>
 <summary><b>T4 — Train 2 Versions + W&B (25) · Venkata</b></summary>
 
-- [ ] Store `WANDB_API_KEY` + `HF_TOKEN` in Kaggle Secrets — **3**
-- [ ] V1 `lr=3e-5` / V2 `lr=5e-5` (one hyperparameter changed) — **7**
-- [ ] Log train loss, val loss, accuracy, F1, all hyperparams — **7**
-- [ ] Screenshot W&B with both runs → report — **5**
+- [x] Store `WANDB_API_KEY` + `HF_TOKEN` in Kaggle Secrets — **3**
+- [x] V1 `lr=3e-5` / V2 `lr=5e-5` (one hyperparameter changed) — **7**
+- [x] Log train loss, val loss, accuracy, F1, all hyperparams — **7**
+- [x] Screenshot W&B with both runs → report — **5**
 </details>
 
 <details>
 <summary><b>T5 — Push to Hugging Face (5) · Venkata</b></summary>
 
-- [ ] Push weights + tokenizer to public HF repo — **3**
-- [ ] Log HF URL to `wandb.run.summary` — **2**
-- [ ] (gate) HF repo Public — Actions inference pulls from here
+- [x] Push weights + tokenizer to public HF repo — **3**
+- [x] Log HF URL to `wandb.run.summary` — **2**
+- [x] (gate) HF repo Public — Actions inference pulls from here
 </details>
 
 <details>
 <summary><b>T6 — Dockerfile (10) · Rohit</b></summary>
 
-- [ ] Slim Python base + inference deps only — **3**
-- [ ] `ARG HF_MODEL_NAME` with sensible default — **2**
-- [ ] Build + test locally end-to-end — **3**
-- [ ] Push to public registry; URL → report — **2**
+- [x] Slim Python base + inference deps only — **3**
+- [x] `ARG HF_MODEL_NAME` with sensible default — **2**
+- [x] Build + test locally end-to-end — **3**
+- [x] Push to public registry; URL → report — **2**
 </details>
 
 <details>
 <summary><b>T7 — GitHub Actions (15) · Rohit</b></summary>
 
-- [ ] CI workflow (`ci.yml`) — lint on push→`develop` — **5**
-- [ ] Inference workflow (`inference.yml`) — manual `workflow_dispatch` — **7**
-- [ ] `HF_TOKEN` in GitHub Secrets; no committed tokens — **3**
-- [ ] Trigger inference → success screenshot → report
+- [x] CI workflow (`ci.yml`) — lint on push→`develop` — **5**
+- [x] Inference workflow (`inference.yml`) — manual `workflow_dispatch` — **7**
+- [x] `HF_TOKEN` in GitHub Secrets; no committed tokens — **3**
+- [x] Trigger inference → success screenshot → report
 </details>
 
 <details>
 <summary><b>T8 — W&B Dashboard (5) · Amit</b></summary>
 
-- [ ] Both runs visible · project Public · comparison table (Accuracy, F1, Loss) · paste URL → report
+- [x] Both runs visible · project Public · comparison table (Accuracy, F1, Loss) · paste URL → report
 </details>
 
 ## 📒 Contribution Log
@@ -168,30 +158,39 @@ Keep this updated as work lands — it feeds the "individual contributions" sect
 | Date | Member | What | PR |
 |---|---|---|---|
 | 2026-06-09 | Rohit | Repo init, branch protection, scaffold | #1 |
-| | | | |
+| 2026-06-11| Amit| Created workflow to pull kaggle notebook with initial data preparation and cleanup| #10|
+| 2026-06-09| Aishwarya| Experimented with distilbert uncased public model, id2label, tokenizer| #6|
+| 2026-06-11| Venkata| Added notebook to capture wandb metrics, pushed trained model to hugging face, simulated drift, fairness| #20|
+| 2026-06-11| Rohit| Added Docker yml and inference yml, py files| #22|
+| 2026-06-12| Aishwarya| architecture diagram and readme file updates| #23|
 
 ## 🗂 Repository Structure
 
 ```
 .
-├── src/
-│   ├── prepare_data.py     # T2: clean + encode + id2label.json
-│   └── inference.py        # Docker + Actions entrypoint
-├── notebooks/
-│   └── train_kaggle.ipynb  # T4/T5: train V1+V2, push best to HF
 ├── .github/
 │   ├── workflows/
-│   │   ├── ci.yml          # T7.1: lint on push→develop
-│   │   ├── inference.yml   # T7.2: manual inference
-│   │   └── auto-merge.yml  # enables native auto-merge on approved PRs
-│   ├── CODEOWNERS          # auto-requests reviewers per path
-│   └── pull_request_template.md
-├── Dockerfile              # T6
-├── id2label.json           # committed label map (6 emotions)
+│   │   ├── amit.yml                 # syncs Kaggle notebook into the repo
+│   │   ├── ci.yaml                  # T7.1: lint on push→develop
+│   │   ├── inference.yml            # T7.2: manual inference (workflow_dispatch)
+│   │   ├── auto-merge.yml           # native auto-merge on approved PRs
+│   │   └── pull_request_template.md # PR template
+│   └── CODEOWNERS                   # auto-requests reviewers per path
+├── notebooks/
+│   ├── notebook012c22c8bb.ipynb     # Kaggle notebook (synced)
+│   └── train_kaggle.ipynb           # T4/T5: train V1+V2, push best to HF
+├── src/
+│   └── inference.py                 # Docker + Actions entrypoint
+├── Dockerfile                       # T6
+├── HLD_UML.svg                      # rendered high-level design diagram
+├── LLD_UML.svg                      # rendered low-level design diagram
+├── hld.puml                         # PlantUML source — HLD
+├── lld.puml                         # PlantUML source — LLD
+├── id2label.json                    # committed label map (6 emotions)
 ├── requirements.txt
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
-├── LICENSE                 # MIT
+├── LICENSE                          # MIT
 └── README.md
 ```
 
@@ -209,7 +208,7 @@ python src/prepare_data.py            # uses load_dataset("dair-ai/emotion","spl
 # 3. Build + test inference image (T6)
 docker build --build-arg HF_MODEL_NAME=<hf-user>/mlops-a3-emotion \
              -t mlops-a3-inference:latest .
-docker run --rm -e INPUT_TEXT='i feel so happy today' mlops-a3-inference:latest   # -> joy
+docker run --rm -e HF_TOKEN = <hf-token> -e INPUT_TEXT='i feel so happy today' mlops-a3-inference:latest   # -> joy
 
 # 4. Push image
 docker push <dockerhub-user>/mlops-a3-inference:latest
